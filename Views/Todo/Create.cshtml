@@ -1,0 +1,18 @@
+@using RiskyTodo.Models.TodoViewModels
+@model CreateViewModel
+
+<h1>New Task</h1>
+<form method="post">
+    <span asp-validation-summary="All"></span>
+    <label asp-for="Name"></label>
+    <input asp-for="Name" />
+    <span asp-validation-for="Name"></span>
+
+    <div>
+        <button type="submit">Create</button>
+    </div>
+</form>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

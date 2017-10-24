@@ -1,6 +1,10 @@
 @model List<Todo>
+@inject UserManager<ApplicationUser> UserManager
 
 <h1>My Tasks</h1>
+<p>
+    <em>Logged in as @UserManager.GetUserName(User)</em>
+</p>
 <p>
     <a asp-action="Create">New task</a>
 </p>

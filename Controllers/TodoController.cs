@@ -57,5 +57,73 @@ namespace RiskyTodo.Controllers
 
             return View(model);
         }
+
+        public IActionResult Search()
+        {
+            return View(new SearchViewModel());
+        }
+
+        // Search with a SQL injection vulnerability
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Search(SearchViewModel viewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                var query = $"SELECT * FROM Todos WHERE OwnerId = '{user.Id}' AND instr(Name, '{viewModel.SearchTerm}')";
+
+                viewModel.Results = await _context.Todos
+                    .FromSql(query)
+                    .ToListAsync();
+            }
+
+            return View(viewModel);
+        }
+
+        public IActionResult SearchSafe1()
+        {
+            return View("Search", new SearchViewModel());
+        }
+
+        // Fix the SQL injection vulnerability
+        // by using EF to generate a parameterized query
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SearchSafe1(SearchViewModel viewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+
+                viewModel.Results = await _context.Todos
+                    .Where(t => t.OwnerId == user.Id && t.Name.Contains(viewModel.SearchTerm))
+                    .ToListAsync();
+            }
+
+            return View("Search", viewModel);
+        }
+
+        public IActionResult SearchSafe2()
+        {
+            return View("Search", new SearchViewModel());
+        }
+
+        // Fix the SQL injection vulnerability by using a parameterized query
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> SearchSafe2(SearchViewModel viewModel)
+        {
+            if(ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                
+                viewModel.Results = await _context.Todos
+                    .FromSql($"SELECT * FROM Todos WHERE OwnerId = {user.Id} AND instr(Name, {viewModel.SearchTerm})")
+                    .ToListAsync();
+            }
+
+            return View("Search", viewModel);
+        }
     }
 }

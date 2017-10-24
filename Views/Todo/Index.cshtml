@@ -1,12 +1,9 @@
 @model List<Todo>
-@inject UserManager<ApplicationUser> UserManager
 
 <h1>My Tasks</h1>
 <p>
-    <em>Logged in as @UserManager.GetUserName(User)</em>
-</p>
-<p>
     <a asp-action="Create">New task</a>
+    &nbsp;<a asp-action="Search">Search tasks</a>
 </p>
 
 @if(Model.Count > 0)
@@ -21,5 +18,5 @@
 }
 else
 {
-    <p>You have no tasks yet.</p>
+    <p>You don't have any tasks. Take the day off! (Or maybe add some tasks?)</p>
 }

@@ -1,0 +1,27 @@
+@using RiskyTodo.Models.TodoViewModels
+@model SearchViewModel
+
+<h1>Search Tasks</h1>
+
+<form method="post">
+    <label asp-for="SearchTerm"></label>
+    <input asp-for="SearchTerm" />
+    <div>
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+@if(Model.Results?.Count > 0)
+{
+    <p>Results:</p>
+    <ul>
+        @foreach(var todo in Model.Results)
+        {
+            <li>@todo.Name</li>
+        }
+    </ul>
+}
+else if(!string.IsNullOrEmpty(Model.SearchTerm))
+{
+    <p>No results.</p>
+}

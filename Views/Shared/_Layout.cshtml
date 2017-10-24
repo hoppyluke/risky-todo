@@ -4,6 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - RiskyTodo</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
@@ -11,12 +12,17 @@
         <h1>Risky Todo</h1>
         <nav>
             <ul>
-                <li><a asp-area="" asp-controller="Todo" asp-action="Index">Home</a></li>
+                <li>
+                    <a asp-area="" asp-controller="Todo" asp-action="Index">
+                        <span class="fa fa-home"></span>
+                    </a>
+                </li>
             </ul>
             @await Html.PartialAsync("_LoginPartial")
         </nav>
     </header>
     <main>
+        @await Html.PartialAsync("_UsernamePartial")
         @RenderBody()
     </main>
     <footer>
